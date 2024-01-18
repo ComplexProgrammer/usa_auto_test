@@ -28,6 +28,15 @@ class BookCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
         child: Column(
           children: <Widget>[
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+              child: Text(
+                book.name_en_us,
+                style: Theme.of(context).textTheme.headline5,
+                textAlign: TextAlign.center,
+              ),
+            ),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
