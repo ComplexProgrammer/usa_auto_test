@@ -26,7 +26,13 @@ class MyApp extends StatelessWidget {
       home: Scaffold(
         drawer: NavBar(),
         appBar: AppBar(
-          title: const Text('Usa Auto Test'),
+          title: const Text(
+            'USA AUTO TEST',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
+          iconTheme: const IconThemeData(color: Colors.white),
           backgroundColor: Colors.blueAccent,
         ),
         body: Body(),

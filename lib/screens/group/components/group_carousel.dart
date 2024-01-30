@@ -16,8 +16,9 @@ class GroupCarousel extends StatefulWidget {
 
 class _GroupCaruselState extends State<GroupCarousel> {
   late PageController _pageController;
-  int initalPage = 1;
+  int initalPage = 0;
   List<Group> groups = [];
+  Group group = Group(id: 0, name_en_us: '');
   var loading = false;
 
   Future<void> getData() async {
@@ -26,7 +27,7 @@ class _GroupCaruselState extends State<GroupCarousel> {
     });
 
     final responseData =
-        await http.get(Uri.parse("$baseUrl/GetGroups/?type_id=1"));
+        await http.get(Uri.parse("$baseUrl/GetGroups/?type_id=3"));
     if (responseData.statusCode == 200) {
       final data = jsonDecode(responseData.body);
       setState(() {
@@ -42,6 +43,9 @@ class _GroupCaruselState extends State<GroupCarousel> {
   void initState() {
     super.initState();
     getData();
+    if (group.id > 0) {
+      initalPage = group.number != 0 ? group.number! - 1 : 0;
+    }
     _pageController = PageController(
       viewportFraction: 0.8,
       initialPage: initalPage,
@@ -67,6 +71,7 @@ class _GroupCaruselState extends State<GroupCarousel> {
                 onPageChanged: (value) {
                   setState(() {
                     initalPage = value;
+                    group = groups[initalPage];
                   });
                 },
                 controller: _pageController,

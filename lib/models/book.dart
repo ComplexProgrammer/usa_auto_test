@@ -4,6 +4,7 @@ class Book {
   String name_ru_ru;
   String name_uz_crl;
   String name_uz_uz;
+  int? sort_order;
   String image;
   int group_id;
   Book({
@@ -12,6 +13,7 @@ class Book {
     required this.name_ru_ru,
     required this.name_uz_crl,
     required this.name_uz_uz,
+    this.sort_order,
     required this.image,
     required this.group_id,
   });
@@ -21,6 +23,7 @@ class Book {
         name_ru_ru: json["name_ru_ru"],
         name_uz_crl: json["name_uz_crl"],
         name_uz_uz: json["name_uz_uz"],
+        sort_order: json["sort_order"],
         image: json["image"],
         group_id: json["group_id"],
       );
@@ -30,6 +33,7 @@ class Book {
         "name_ru_ru": name_ru_ru,
         "name_uz_crl": name_uz_crl,
         "name_uz_uz": name_uz_uz,
+        "sort_order": sort_order,
         "image": image,
         "group_id": group_id,
       };

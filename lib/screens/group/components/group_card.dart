@@ -15,35 +15,38 @@ class GroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kDefaultPadding),
-      child: OpenContainer(
-        closedBuilder: (context, action) => buildGroupCard(context),
-        openBuilder: (context, action) => BookScreen(group: group),
+      child: InkWell(
+        onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => BookScreen(
+                      group: group,
+                    ))),
+        child: buildGroupCard(context),
       ),
-      // child: InkWell(
-      //   onTap: () => Navigator.push(
-      //       context,
-      //       MaterialPageRoute(
-      //           builder: (context) => BookScreen(
-      //                 group: group,
-      //               ))),
-      //   child: buildGroupCard(context),
-      // ),
     );
   }
 
   Column buildGroupCard(BuildContext context) {
     return Column(
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
+          child: Text(
+            group.name_en_us,
+            style: Theme.of(context).textTheme.headlineSmall,
+            textAlign: TextAlign.center,
+          ),
+        ),
         Expanded(
           child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(50),
               boxShadow: const [kDefaultShadow],
               color: Colors.greenAccent,
-              // color: Color(0xFFF909080),
               image: group.image != ''
                   ? DecorationImage(
-                      fit: BoxFit.scaleDown,
+                      fit: BoxFit.cover,
                       image: NetworkImage("$baseUrl/media/${group.image}"),
                     )
                   : const DecorationImage(
@@ -55,29 +58,6 @@ class GroupCard extends StatelessWidget {
             ),
           ),
         ),
-        // Padding(
-        //   padding: const EdgeInsets.symmetric(vertical: kDefaultPadding / 2),
-        //   child: Text(
-        //     group.name_en_us,
-        //     style: Theme.of(context).textTheme.headline5,
-        //   ),
-        // ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Image.network(
-        //       '$baseUrl/tests/types/images/autotest.jpg',
-        //       height: 20,
-        //     ),
-        //     const SizedBox(
-        //       width: kDefaultPadding / 2,
-        //     ),
-        //     Text(
-        //       "${group.name_en_us}",
-        //       style: Theme.of(context).textTheme.bodyText2,
-        //     ),
-        //   ],
-        // )
       ],
     );
   }

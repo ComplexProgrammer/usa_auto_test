@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 // import 'dart:html';
 import 'package:collection/collection.dart';
 import 'package:animations/animations.dart';
@@ -7,12 +8,14 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pagination/flutter_pagination.dart';
 import 'package:flutter_pagination/widgets/button_styles.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:usa_auto_test/constants.dart';
 import 'package:usa_auto_test/models/answer.dart';
 import 'package:usa_auto_test/models/book.dart';
 import 'package:usa_auto_test/models/question.dart';
 import 'package:usa_auto_test/models/topic.dart';
 import 'package:usa_auto_test/screens/ads/banner.dart';
+import 'package:usa_auto_test/screens/ads/main.dart';
 import 'package:usa_auto_test/screens/question/components/CustomRadio.dart';
 import 'package:usa_auto_test/screens/question/components/backdrop.dart';
 import 'package:usa_auto_test/screens/question/components/time.dart';
@@ -30,6 +33,8 @@ int all_question = 0;
 int time = 900;
 int minutes = 15;
 final seconds = 0;
+List<Topic> topics = [];
+var adShow = false;
 
 class selected_answer {
   int topicId;
@@ -68,13 +73,9 @@ class Body extends StatelessWidget {
     required this.topic,
     required this.book,
     required this.group,
-    // required this.tjs,
-    // required this.njs
   });
   @override
   Widget build(BuildContext context) {
-    // togri_javoblar_soni = tjs;
-    // notogri_javoblar_soni = njs;
     Timer? countdownTimer;
     Duration myDuration = Duration(minutes: minutes, seconds: seconds);
     bool isPaused = false;
@@ -86,7 +87,12 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          Backdrop(size: size, topic: topic),
+          Backdrop(
+            size: size,
+            topic: topic,
+            book: book,
+            group: group,
+          ),
           MyBannerAdWidget(),
           // Time(minutes: minutes, seconds: seconds),
           Padding(
@@ -116,11 +122,11 @@ void _showDialog(
     BuildContext context, Topic topic, Book book, Group group, bool isPaused) {
   int belgilanmagan_savollar =
       all_question - togri_javoblar_soni - notogri_javoblar_soni;
-  // flutter defined function
   showDialog(
     barrierDismissible: false,
     context: context,
     builder: (context) => AlertDialog(
+      scrollable: true,
       insetPadding: const EdgeInsets.symmetric(vertical: 150),
       contentPadding: EdgeInsets.zero,
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -134,44 +140,31 @@ void _showDialog(
       icon: const Icon(Icons.event),
       titlePadding: const EdgeInsets.all(kDefaultPadding / 2),
       content: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          MyBannerAdWidget(),
           if (togri_javoblar_soni != 0)
             Text(
-              'Correct answers: ${togri_javoblar_soni}',
+              'Correct answers: $togri_javoblar_soni',
               style: const TextStyle(
                 color: Colors.greenAccent,
               ),
             ),
           if (notogri_javoblar_soni != 0)
             Text(
-              'Wrong answers: ${notogri_javoblar_soni}',
+              'Wrong answers: $notogri_javoblar_soni',
               style: const TextStyle(
                 color: Colors.redAccent,
               ),
             ),
           if (belgilanmagan_savollar != 0)
             Text(
-              'Unmarked questions:  ${belgilanmagan_savollar}',
+              'Unmarked questions:  $belgilanmagan_savollar',
               style: const TextStyle(
                 color: Colors.grey,
               ),
             ),
-          ElevatedButton.icon(
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TopicScreen(
-                  book: book,
-                  group: group,
-                ),
-              ),
-            ),
-            icon: const Icon(
-              Icons.topic,
-              size: 24.0,
-            ),
-            label: const Text('Topics'), // <-- Text
-          ),
           ElevatedButton.icon(
             onPressed: () {
               debugPrint('ElevatedButton Clicked');
@@ -186,7 +179,59 @@ void _showDialog(
             style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
           ),
           ElevatedButton.icon(
-            onPressed: () => {nextTopic(context, topic, book, group, true)},
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TopicScreen(
+                  group: group,
+                  book: book,
+                ),
+              ),
+            ),
+            icon: const Icon(
+              Icons.topic,
+              size: 24.0,
+            ),
+            label: const Text('Topics'),
+          ),
+          if (topic.number > 1)
+            ElevatedButton.icon(
+              onPressed: () => {
+                if (topics.firstWhereOrNull(
+                        (element) => element.number == topic.number - 1) !=
+                    null)
+                  {
+                    topic = topics.firstWhere(
+                        (element) => element.number == topic.number - 1),
+                    changeTopic(context, topic, book, group, false)
+                  }
+              },
+              icon: const Icon(
+                Icons.arrow_left_outlined,
+                size: 24.0,
+              ),
+              label: const Text('Previous ticket'),
+            ),
+          if (topics.length > topic.number)
+            ElevatedButton.icon(
+              onPressed: () => {
+                if (topics.firstWhereOrNull(
+                        (element) => element.number == topic.number + 1) !=
+                    null)
+                  {
+                    topic = topics.firstWhere(
+                        (element) => element.number == topic.number + 1),
+                    changeTopic(context, topic, book, group, false)
+                  }
+              },
+              icon: const Icon(
+                Icons.arrow_right_outlined,
+                size: 24.0,
+              ),
+              label: const Text('Next ticket'),
+            ),
+          ElevatedButton.icon(
+            onPressed: () => {changeTopic(context, topic, book, group, true)},
             icon: const Icon(
               Icons.refresh,
               size: 24.0,
@@ -195,23 +240,6 @@ void _showDialog(
             style: ElevatedButton.styleFrom(shape: const StadiumBorder()),
           ),
           MyBannerAdWidget(),
-          // ElevatedButton.icon(
-          //   onPressed: () => Navigator.push(
-          //     context,
-          //     MaterialPageRoute(
-          //       builder: (context) => QuestionScreen(
-          //         topic: topic,
-          //         book: book,
-          //         group: group,
-          //       ),
-          //     ),
-          //   ),
-          //   icon: const Icon(
-          //     Icons.start,
-          //     size: 24.0,
-          //   ),
-          //   label: const Text('Keyingi biletga o`tish'),
-          // ),
         ],
       ),
 
@@ -240,8 +268,52 @@ void _showDialog(
   );
 }
 
-void nextTopic(BuildContext context, Topic topic, Book book, Group group,
+void _showImage(BuildContext context, Question question) {
+  showDialog(
+    barrierDismissible: true,
+    context: context,
+    builder: (context) => AlertDialog(
+      scrollable: true,
+      insetPadding: const EdgeInsets.symmetric(vertical: 140),
+      contentPadding: EdgeInsets.zero,
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      backgroundColor: Colors.amber,
+      icon: const Icon(Icons.image),
+      titlePadding: const EdgeInsets.all(kDefaultPadding / 2),
+      content: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          MyBannerAdWidget(),
+          Container(
+            width: 300,
+            height: 200,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(bottomLeft: Radius.circular(5)),
+              boxShadow: const [kDefaultShadow],
+              color: Color(0xFFF709090),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: NetworkImage('$baseUrl/media/${question.image}'),
+              ),
+            ),
+          ),
+          MyBannerAdWidget(),
+        ],
+      ),
+      actions: [
+        TextButton(
+          child: const Text("close"),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
+    ),
+  );
+}
+
+void changeTopic(BuildContext context, Topic topic, Book book, Group group,
     bool refresh) async {
+  adShow = true;
   final SharedPreferences prefs = await _prefs;
   if (refresh && selectedAnswers.isNotEmpty) {
     selectedAnswers = selectedAnswers
@@ -295,6 +367,20 @@ class MyStatefulWidget extends StatefulWidget {
 }
 
 class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  static final AdRequest request = AdRequest(
+    keywords: <String>['foo', 'bar'],
+    contentUrl: 'http://foo.com/bar.html',
+    nonPersonalizedAds: true,
+  );
+
+  InterstitialAd? _interstitialAd;
+  int _numInterstitialLoadAttempts = 0;
+
+  RewardedAd? _rewardedAd;
+  int _numRewardedLoadAttempts = 0;
+
+  RewardedInterstitialAd? _rewardedInterstitialAd;
+  int _numRewardedInterstitialLoadAttempts = 0;
   // final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   late Future<String> _selected_answer;
 
@@ -311,7 +397,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       if (selectedAnswers.isEmpty) {
         selectedAnswers.add(selectedAnswer);
       } else {
-        // ignore: unrelated_type_equality_checks, unrelated_type_equality_checks
         if (selectedAnswers.firstWhereOrNull(
                 (element) => element.questionId == selectedAnswer.questionId) ==
             null) {
@@ -367,7 +452,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
         int notogri_javob_soni = 0;
         Question question = this.question;
         List<Question> questions = this.questions;
-        //List<selected_answer> selectedAnswers = this.selectedAnswers;
         for (Map<String, dynamic> i in data) {
           question.selectedAnswer = null;
           if (selectedAnswers.firstWhereOrNull(
@@ -423,7 +507,11 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   @override
   void initState() {
     super.initState();
+    MobileAds.instance.updateRequestConfiguration(
+        RequestConfiguration(testDeviceIds: [testDevice]));
+    _createInterstitialAd();
     getData();
+    loadTopics(book.id.toString());
     _pageController = PageController(
       viewportFraction: 0.8,
       initialPage: initalPage,
@@ -434,6 +522,57 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+  }
+
+  void _createInterstitialAd() {
+    InterstitialAd.load(
+        adUnitId: Platform.isAndroid
+            ? 'ca-app-pub-7773722896374259/7914455903'
+            : 'ca-app-pub-7773722896374259/7914455903',
+        request: request,
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (InterstitialAd ad) {
+            print('$ad loaded');
+            _interstitialAd = ad;
+            _numInterstitialLoadAttempts = 0;
+            _interstitialAd!.setImmersiveMode(true);
+            if (adShow) {
+              adShow = false;
+              _showInterstitialAd();
+            }
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            print('InterstitialAd failed to load: $error.');
+            _numInterstitialLoadAttempts += 1;
+            _interstitialAd = null;
+            if (_numInterstitialLoadAttempts < maxFailedLoadAttempts) {
+              _createInterstitialAd();
+            }
+          },
+        ));
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) {
+      print('Warning: attempt to show interstitial before loaded.');
+      return;
+    }
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      onAdShowedFullScreenContent: (InterstitialAd ad) =>
+          print('ad onAdShowedFullScreenContent.'),
+      onAdDismissedFullScreenContent: (InterstitialAd ad) {
+        print('$ad onAdDismissedFullScreenContent.');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+      onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
+        print('$ad onAdFailedToShowFullScreenContent: $error');
+        ad.dispose();
+        _createInterstitialAd();
+      },
+    );
+    _interstitialAd!.show();
+    _interstitialAd = null;
   }
 
   setSelectedRadio(val) {
@@ -501,11 +640,31 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           Text(
             question.name_en_us.toString(),
             style: const TextStyle(
-              color: Colors.grey,
-              fontSize: 24,
+              color: Colors.blueAccent,
+              fontSize: 18,
             ),
             textAlign: TextAlign.center,
           ),
+          if (question.image != "")
+            InkWell(
+              onTap: () {
+                _showImage(context, question);
+              },
+              child: Container(
+                height: 100,
+                width: 150,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.only(bottomLeft: Radius.circular(5)),
+                  boxShadow: [kDefaultShadow],
+                  color: Color(0xFFF709090),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage('$baseUrl/media/${question.image}'),
+                  ),
+                ),
+              ),
+            ),
           ListView.builder(
             shrinkWrap: true,
             itemCount: sampleData.length,
@@ -559,6 +718,10 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
   }
 
   void setData(int questionNumber) {
+    if (questionNumber > questions.length) {
+      questionNumber = 1;
+      _enabled = false;
+    }
     question = questions.firstWhere((it) => it.number == questionNumber);
     currentPage = question.number;
     loadAswers(question.id.toString());
@@ -598,6 +761,24 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
           if (index == 10) buttonText = 'K';
           sampleData.add(RadioModel(question, i, false, false, buttonText));
         }
+      });
+    }
+  }
+
+  Future<void> loadTopics(String bookId) async {
+    setState(() {
+      loading = true;
+    });
+    topics = [];
+    final responseData =
+        await http.get(Uri.parse("$baseUrl/GetTopics?book_id=$bookId"));
+    if (responseData.statusCode == 200) {
+      final data = jsonDecode(responseData.body);
+      setState(() {
+        for (Map<String, dynamic> i in data) {
+          topics.add(Topic.fromJson(i));
+        }
+        loading = false;
       });
     }
   }

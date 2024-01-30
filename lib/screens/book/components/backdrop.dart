@@ -60,7 +60,7 @@ class Backdrop extends StatelessWidget {
                   )
                 ]),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   group.name_en_us,
@@ -77,13 +77,13 @@ class Backdrop extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => SplashApp(),
+                builder: (context) => const SplashApp(),
               ),
             ),
             child: const Icon(
               Icons.arrow_back,
               size: 24.0,
-              color: Colors.white,
+              color: Colors.redAccent,
             ),
           ),
         ),

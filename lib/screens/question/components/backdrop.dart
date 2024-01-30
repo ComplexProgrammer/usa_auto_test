@@ -1,16 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:usa_auto_test/constants.dart';
+import 'package:usa_auto_test/models/book.dart';
+import 'package:usa_auto_test/models/group.dart';
 import 'package:usa_auto_test/models/topic.dart';
+import 'package:usa_auto_test/screens/topic/topic_screen.dart';
 
 class Backdrop extends StatelessWidget {
   const Backdrop({
     super.key,
     required this.size,
     required this.topic,
+    required this.book,
+    required this.group,
   });
 
   final Size size;
+  final Book book;
   final Topic topic;
+  final Group group;
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +64,7 @@ class Backdrop extends StatelessWidget {
                   )
                 ]),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   topic.name_en_us,
@@ -68,7 +75,25 @@ class Backdrop extends StatelessWidget {
             ),
           ),
         ),
-        const SafeArea(child: BackButton())
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 5),
+          child: InkWell(
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TopicScreen(
+                  book: book,
+                  group: group,
+                ),
+              ),
+            ),
+            child: const Icon(
+              Icons.arrow_back,
+              size: 24.0,
+              color: Colors.red,
+            ),
+          ),
+        ),
       ]),
     );
   }

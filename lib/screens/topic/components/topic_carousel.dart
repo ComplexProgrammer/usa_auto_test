@@ -22,8 +22,16 @@ class _TopicCaruselState extends State<TopicCarousel> {
   final Book book;
   final Group group;
   late PageController _pageController;
-  int initalPage = 1;
+  int initalPage = 0;
   List<Topic> topics = [];
+  Topic topic = Topic(
+      id: 0,
+      name_en_us: '',
+      name_ru_ru: '',
+      name_uz_crl: '',
+      name_uz_uz: '',
+      number: 0,
+      image: '');
   var loading = false;
 
   _TopicCaruselState(this.book, this.group);
@@ -50,6 +58,9 @@ class _TopicCaruselState extends State<TopicCarousel> {
   void initState() {
     super.initState();
     getData();
+    if (topic.id > 0) {
+      initalPage = topic.number != 0 ? topic.number - 1 : 0;
+    }
     _pageController = PageController(
       viewportFraction: 0.8,
       initialPage: initalPage,
@@ -75,6 +86,7 @@ class _TopicCaruselState extends State<TopicCarousel> {
                 onPageChanged: (value) {
                   setState(() {
                     initalPage = value;
+                    topic = topics[initalPage];
                   });
                 },
                 controller: _pageController,

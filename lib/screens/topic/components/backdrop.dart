@@ -62,7 +62,7 @@ class Backdrop extends StatelessWidget {
                   )
                 ]),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   book.name_en_us,
@@ -72,7 +72,6 @@ class Backdrop extends StatelessWidget {
             ),
           ),
         ),
-        // const SafeArea(child: BackButton()),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 5),
           child: InkWell(
@@ -87,7 +86,7 @@ class Backdrop extends StatelessWidget {
             child: const Icon(
               Icons.arrow_back,
               size: 24.0,
-              color: Colors.white,
+              color: Colors.red,
             ),
           ),
         ),

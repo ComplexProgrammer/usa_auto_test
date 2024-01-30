@@ -34,8 +34,16 @@ class BookCarousel extends StatefulWidget {
 class _BookCaruselState extends State<BookCarousel> {
   final Group group;
   late PageController _pageController;
-  int initalPage = 1;
+  int initalPage = 0;
   List<Book> books = [];
+  Book book = Book(
+      id: 0,
+      name_en_us: '',
+      name_ru_ru: '',
+      name_uz_crl: '',
+      name_uz_uz: '',
+      image: '',
+      group_id: 0);
   var loading = false;
   var adShow = true;
 
@@ -76,13 +84,16 @@ class _BookCaruselState extends State<BookCarousel> {
 
   @override
   void initState() {
+    getData();
     super.initState();
+    if (book.id > 0) {
+      initalPage = book.sort_order != 0 ? book.sort_order! - 1 : 0;
+    }
     MobileAds.instance.updateRequestConfiguration(
         RequestConfiguration(testDeviceIds: [testDevice]));
     _createInterstitialAd();
     _createRewardedAd();
     _createRewardedInterstitialAd();
-    getData();
     _pageController = PageController(
       viewportFraction: 0.8,
       initialPage: initalPage,
@@ -266,6 +277,7 @@ class _BookCaruselState extends State<BookCarousel> {
                 onPageChanged: (value) {
                   setState(() {
                     initalPage = value;
+                    book = books[initalPage];
                   });
                 },
                 controller: _pageController,
