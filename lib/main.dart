@@ -21,10 +21,17 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    bool isOpenedDrawer = false;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         drawer: NavBar(),
+        onDrawerChanged: (isOpened) {
+          isOpenedDrawer = isOpened;
+        },
+        onEndDrawerChanged: (isOpened) {
+          print(isOpened);
+        },
         appBar: AppBar(
           title: const Text(
             'USA AUTO TEST',

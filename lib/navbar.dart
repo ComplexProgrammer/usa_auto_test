@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:usa_auto_test/constants.dart';
+import 'package:usa_auto_test/screens/ads/banner.dart';
 
 class NavBar extends StatelessWidget {
   // const NavBar({super.key});
@@ -87,7 +88,7 @@ class NavBar extends StatelessWidget {
                   applicationName: data.appName,
                   applicationVersion: data.version,
                   applicationLegalese: '© 2024 Complex Programmer',
-                  aboutBoxChildren: [
+                  aboutBoxChildren: const [
                     ///Content goes here...
                   ],
                   child: const Text(
@@ -100,6 +101,7 @@ class NavBar extends StatelessWidget {
               },
             ),
           ),
+          MyBannerAdWidget(),
         ],
       ),
     );

@@ -16,14 +16,14 @@ class Body extends StatelessWidget {
       //     fit: BoxFit.scaleDown,
       //   ),
       // ),
-      child: SingleChildScrollView(
+      child: const SingleChildScrollView(
         child: Column(
           children: <Widget>[
             // Categorylist(),
             // Genres(),
-            const SizedBox(height: kDefaultPadding * 4),
-            const GroupCarousel(),
-            MyBannerAdWidget(),
+            SizedBox(height: kDefaultPadding * 4),
+            GroupCarousel(),
+            // MyBannerAdWidget(),
           ],
         ),
       ),
