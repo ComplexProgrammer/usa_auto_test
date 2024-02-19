@@ -442,8 +442,8 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
       loading = true;
     });
     questions = [];
-    final responseData = await http.get(
-        Uri.parse("$baseUrl/GetQuestions?topic_id=${topic.id.toString()}"));
+    final responseData = await http.get(Uri.parse(
+        "$baseUrl/tests/GetQuestions?topic_id=${topic.id.toString()}"));
     if (responseData.statusCode == 200) {
       final data = jsonDecode(responseData.body);
       setState(() {
@@ -737,7 +737,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     answers = [];
     sampleData = [];
     final responseData = await http
-        .get(Uri.parse("$baseUrl/GetAnswers?question_id=$questionId"));
+        .get(Uri.parse("$baseUrl/tests/GetAnswers?question_id=$questionId"));
     if (responseData.statusCode == 200) {
       final data = jsonDecode(responseData.body);
 
@@ -771,7 +771,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
     });
     topics = [];
     final responseData =
-        await http.get(Uri.parse("$baseUrl/GetTopics?book_id=$bookId"));
+        await http.get(Uri.parse("$baseUrl/tests/GetTopics?book_id=$bookId"));
     if (responseData.statusCode == 200) {
       final data = jsonDecode(responseData.body);
       setState(() {

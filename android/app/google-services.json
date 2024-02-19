@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "755681568857",
+    "firebase_url": "https://c0mplex-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "c0mplex",
     "storage_bucket": "c0mplex.appspot.com"
   },
@@ -28,10 +29,10 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_ie8EYtVItas8PKlBUoHOg9QipbMdMOM"
+          "current_key": "AIzaSyBj21ySm8AfeCowiUXpopDt9W7KEDdAjPg"
         },
         {
-          "current_key": "AIzaSyBj21ySm8AfeCowiUXpopDt9W7KEDdAjPg"
+          "current_key": "AIzaSyD_ie8EYtVItas8PKlBUoHOg9QipbMdMOM"
         }
       ],
       "services": {
@@ -42,10 +43,10 @@
               "client_type": 3
             },
             {
-              "client_id": "755681568857-980djgobqq1ac166u1c8to6gjjkrpq9n.apps.googleusercontent.com",
+              "client_id": "755681568857-12f8me3ft6rg9vf6oklramippk6dm97s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.flutterTests"
+                "bundle_id": "com.example.uzbAvtoTest.RunnerTests"
               }
             }
           ]
@@ -76,10 +77,10 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_ie8EYtVItas8PKlBUoHOg9QipbMdMOM"
+          "current_key": "AIzaSyBj21ySm8AfeCowiUXpopDt9W7KEDdAjPg"
         },
         {
-          "current_key": "AIzaSyBj21ySm8AfeCowiUXpopDt9W7KEDdAjPg"
+          "current_key": "AIzaSyD_ie8EYtVItas8PKlBUoHOg9QipbMdMOM"
         }
       ],
       "services": {
@@ -90,10 +91,10 @@
               "client_type": 3
             },
             {
-              "client_id": "755681568857-980djgobqq1ac166u1c8to6gjjkrpq9n.apps.googleusercontent.com",
+              "client_id": "755681568857-12f8me3ft6rg9vf6oklramippk6dm97s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.flutterTests"
+                "bundle_id": "com.example.uzbAvtoTest.RunnerTests"
               }
             }
           ]
@@ -124,10 +125,10 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyD_ie8EYtVItas8PKlBUoHOg9QipbMdMOM"
+          "current_key": "AIzaSyBj21ySm8AfeCowiUXpopDt9W7KEDdAjPg"
         },
         {
-          "current_key": "AIzaSyBj21ySm8AfeCowiUXpopDt9W7KEDdAjPg"
+          "current_key": "AIzaSyD_ie8EYtVItas8PKlBUoHOg9QipbMdMOM"
         }
       ],
       "services": {
@@ -138,16 +139,64 @@
               "client_type": 3
             },
             {
-              "client_id": "755681568857-980djgobqq1ac166u1c8to6gjjkrpq9n.apps.googleusercontent.com",
+              "client_id": "755681568857-12f8me3ft6rg9vf6oklramippk6dm97s.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.flutterTests"
+                "bundle_id": "com.example.uzbAvtoTest.RunnerTests"
               }
             }
           ]
         }
       },
       "admob_app_id": "ca-app-pub-7773722896374259~1107518489"
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:755681568857:android:147cbacdd9e99873fe2948",
+        "android_client_info": {
+          "package_name": "uzbavtotest.complexprogrammer.uz"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "755681568857-4l3m720lbskc72k7trjtfcqnrs7207gd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "uzbavtotest.complexprogrammer.uz",
+            "certificate_hash": "7e215a7335249217b9121961dc58661f70dd8dc6"
+          }
+        },
+        {
+          "client_id": "755681568857-m6h958r9t1d9e4aa9dtpdhdhrv1qd8o0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBj21ySm8AfeCowiUXpopDt9W7KEDdAjPg"
+        },
+        {
+          "current_key": "AIzaSyD_ie8EYtVItas8PKlBUoHOg9QipbMdMOM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "755681568857-m6h958r9t1d9e4aa9dtpdhdhrv1qd8o0.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "755681568857-12f8me3ft6rg9vf6oklramippk6dm97s.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.uzbAvtoTest.RunnerTests"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-7773722896374259~4896837643"
     }
   ],
   "configuration_version": "1"
